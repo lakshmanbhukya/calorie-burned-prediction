@@ -1,3 +1,4 @@
+import os
 import gradio as gr
 import pandas as pd
 import numpy as np
@@ -5,9 +6,9 @@ import pickle
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+port = int(os.environ.get("PORT", 7860))
 # Load all models and components
 print("Loading models and components...")
-
 try:
     with open('./models/linear_regression_model.pkl', 'rb') as f:
         lr_model = pickle.load(f)
@@ -308,4 +309,8 @@ with gr.Blocks(title="Calorie Prediction Model Comparison", theme=gr.themes.Soft
 
 # Launch the app
 if __name__ == "__main__":
-    demo.launch(share=True)
+    demo.launch(
+    server_name="0.0.0.0",  # must bind to all interfaces on a cloud server
+    server_port=port,        # use Render’s PORT
+    share=False              # no need for Gradio's temporary share link
+)
